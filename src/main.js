@@ -1,6 +1,7 @@
 import './style.css'
-import { db } from './firebase.js'
+import { db, auth, googleProvider } from './firebase.js'
 import { collection, addDoc, getDocs } from 'firebase/firestore'
+import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth'
 
 // Navbar scroll effect
 const navbar = document.getElementById('navbar')
@@ -43,34 +44,43 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   })
 })
 
-// Log for production ready confirmation
-console.log('MK IMPULSA Landing Page Loaded Successfully')
+// --- Authentication Logic ---
+const authContainer = document.getElementById('auth-container')
 
-// --- Firebase Connection Test ---
-const testFirebaseConnection = async () => {
-  try {
-    console.log('--- Iniciando Prueba de Firebase ---')
-    
-    // 1. Insertar documento
-    const docRef = await addDoc(collection(db, "test"), {
-      message: "Prueba de conexión exitosa",
-      timestamp: new Date(),
-      status: "connected"
-    });
-    console.log("Documento insertado con ID:", docRef.id);
-
-    // 2. Leer documentos de la colección 'test'
-    const querySnapshot = await getDocs(collection(db, "test"));
-    console.log("Leyendo documentos de la colección 'test':");
-    querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} =>`, doc.data());
-    });
-
-    console.log('--- Prueba de Firebase Finalizada con Éxito ---')
-  } catch (e) {
-    console.error("Error en la prueba de Firebase:", e);
+const updateAuthUI = (user) => {
+  if (user) {
+    authContainer.innerHTML = `
+      <div class="user-profile">
+        <img src="${user.photoURL}" alt="${user.displayName}" class="user-avatar">
+        <span class="user-name">${user.displayName.split(' ')[0]}</span>
+        <button id="logout-btn" class="btn-text">Cerrar Sesión</button>
+      </div>
+    `
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      signOut(auth)
+    })
+  } else {
+    authContainer.innerHTML = `
+      <button id="login-btn" class="btn btn-secondary">
+        <i data-lucide="log-in"></i> Iniciar Sesión
+      </button>
+    `
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      try {
+        await signInWithPopup(auth, googleProvider)
+      } catch (error) {
+        console.error("Error al iniciar sesión:", error)
+        alert("No se pudo iniciar sesión. Asegúrate de tener habilitado Google Auth en Firebase.")
+      }
+    })
   }
+  // Re-initialize icons for dynamic content
+  if (window.lucide) lucide.createIcons()
 }
 
-// Ejecutar prueba
-testFirebaseConnection();
+onAuthStateChanged(auth, (user) => {
+  updateAuthUI(user)
+})
+
+// Log for production ready confirmation
+console.log('MK IMPULSA Landing Page Loaded Successfully')

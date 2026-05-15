@@ -1,17 +1,19 @@
 import './style.css'
 import { db, auth, googleProvider } from './firebase.js'
-import { collection, addDoc, getDocs } from 'firebase/firestore'
+import { collection, doc, setDoc, serverTimestamp, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth'
 
 // Navbar scroll effect
 const navbar = document.getElementById('navbar')
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    navbar.classList.add('scrolled')
-  } else {
-    navbar.classList.remove('scrolled')
-  }
-})
+if (navbar) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled')
+    } else {
+      navbar.classList.remove('scrolled')
+    }
+  })
+}
 
 // Scroll Reveal Animation
 const revealElements = document.querySelectorAll('[data-reveal]')
@@ -48,12 +50,28 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const authContainer = document.getElementById('auth-container')
 
 const updateAuthUI = (user) => {
+  if (!authContainer) return
+
   if (user) {
+    // Save/Update user in Firestore
+    const userRef = doc(db, 'users', user.uid)
+    setDoc(userRef, {
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+      lastLogin: serverTimestamp()
+    }, { merge: true })
+
     authContainer.innerHTML = `
-      <div class="user-profile">
-        <img src="${user.photoURL}" alt="${user.displayName}" class="user-avatar">
-        <span class="user-name">${user.displayName.split(' ')[0]}</span>
-        <button id="logout-btn" class="btn-text">Cerrar Sesión</button>
+      <div class="user-profile-premium">
+        ${user.email === 'agenciamkimpulsa@gmail.com' ? '<a href="/admin.html" class="god-mode-badge">Modo Dios</a>' : ''}
+        <div class="user-info-pill">
+          <img src="${user.photoURL}" alt="${user.displayName}" class="user-avatar-premium">
+          <span class="user-name-premium">${user.displayName.split(' ')[0]}</span>
+        </div>
+        <button id="logout-btn" class="logout-icon-btn" title="Cerrar Sesión">
+          <i data-lucide="log-out"></i>
+        </button>
       </div>
     `
     document.getElementById('logout-btn').addEventListener('click', () => {
@@ -70,7 +88,6 @@ const updateAuthUI = (user) => {
         await signInWithPopup(auth, googleProvider)
       } catch (error) {
         console.error("Error al iniciar sesión:", error)
-        alert("No se pudo iniciar sesión. Asegúrate de tener habilitado Google Auth en Firebase.")
       }
     })
   }

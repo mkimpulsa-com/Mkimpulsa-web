@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin | Modo Dios | MK IMPULSA</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .admin-page {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .stat-card {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+        .users-table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        th {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .user-row img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar" class="scrolled">
+        <div class="container nav-content">
+            <div class="logo">MK<span style="color: var(--primary);">IMPULSA</span> <span style="font-size: 0.7rem; opacity: 0.5; vertical-align: top;">ADMIN</span></div>
+            <a href="/" class="btn btn-secondary">Volver al Sitio</a>
+        </div>
+    </nav>
+
+    <div class="container admin-page">
+        <div id="access-denied" style="display: none; text-align: center; padding: 100px 0;">
+            <h1 class="gradient-text">Acceso Denegado</h1>
+            <p>No tienes permisos para estar aquí. Regresa a la página principal.</p>
+            <br>
+            <a href="/" class="btn btn-primary">Volver al inicio</a>
+        </div>
+
+        <div id="admin-content" style="display: none;">
+            <div class="admin-header">
+                <h1 class="gradient-text">Modo Dios</h1>
+                <p id="admin-welcome"></p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <p>Total Usuarios</p>
+                    <h3 id="total-users">0</h3>
+                </div>
+                <div class="stat-card glass">
+                    <p>Hoy</p>
+                    <h3 id="today-users">0</h3>
+                </div>
+                <div class="stat-card glass">
+                    <p>Estado Sistema</p>
+                    <h3 style="color: var(--secondary);">OK</h3>
+                </div>
+            </div>
+
+            <div class="glass" style="padding: 2rem;">
+                <h2>Usuarios Registrados</h2>
+                <div class="users-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Correo</th>
+                                <th>Último Acceso</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-list">
+                            <!-- Users will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/admin.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

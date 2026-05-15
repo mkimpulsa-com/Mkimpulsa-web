@@ -302,8 +302,108 @@ footer {
   transform: translateY(0);
 }
 
+/* Auth UI */
+#auth-container {
+  margin: 0 20px;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
+}
+
+/* Premium Auth UI */
+.user-profile-premium {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.god-mode-badge {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #000;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+  transition: var(--transition);
+}
+
+.god-mode-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(251, 191, 36, 0.6);
+}
+
+.user-info-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 12px 4px 4px;
+  border-radius: 50px;
+  border: 1px solid var(--glass-border);
+  transition: var(--transition);
+}
+
+.user-info-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
+}
+
+.user-avatar-premium {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+}
+
+.user-name-premium {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.logout-icon-btn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.logout-icon-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.logout-icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .nav-links {
     display: none;
   }
@@ -314,5 +414,12 @@ footer {
   
   .hero h1 {
     font-size: 3rem;
+  }
+
+  .user-name-premium {
+    display: none;
+  }
+  .user-info-pill {
+    padding: 4px;
   }
 }
